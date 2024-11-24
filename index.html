@@ -21,7 +21,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
-            justify-content: center; /* Center the logo horizontally */
+            justify-content: center;
         }
         .logo img {
             width: 180px; /* Set the desired width */
@@ -91,6 +91,7 @@
             background-color: #f7f7f7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin: 20px 0;
+            text-align: center; /* Center content */
         }
         .feature h2 {
             margin-top: 0;
@@ -143,6 +144,29 @@
                 status.textContent = 'Paused';
             }
         }
+
+        let spotlightIndex = 0;
+        const spotlightData = [
+            {
+                image: 'Images/Town.png',
+                description: 'Farmboy Studios has been streaming our radio station since October of this year and continues to be a proud partner with us. They develop Roblox prison games.'
+            },
+            // Add more spotlight data as needed
+        ];
+
+        function rotateSpotlight() {
+            const spotlightImage = document.getElementById('spotlight-image');
+            const spotlightDescription = document.getElementById('spotlight-description');
+
+            spotlightIndex = (spotlightIndex + 1) % spotlightData.length;
+
+            spotlightImage.src = spotlightData[spotlightIndex].image;
+            spotlightDescription.textContent = spotlightData[spotlightIndex].description;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(rotateSpotlight, 3000); // Rotate every 3 seconds
+        });
     </script>
 </head>
 <body>
@@ -164,14 +188,9 @@
         <div id="status" class="status">Paused</div>
     </section>
     <section class="feature">
-        <h2>Featured Playlist</h2>
-        <img src="Images/playlist.jpg" alt="Featured Playlist">
-        <p>Check out our handpicked playlist featuring the best holiday tunes to keep your spirits high!</p>
-    </section>
-    <section class="feature">
-        <h2>DJ Spotlight</h2>
-        <img src="Images/dj.jpg" alt="DJ Spotlight">
-        <p>Meet DJ Melody, our holiday special DJ, bringing you the best beats and festive vibes all season long!</p>
+        <h2>Community Spotlight</h2>
+        <img id="spotlight-image" src="Images/Town.png" alt="Spotlight Image">
+        <p id="spotlight-description">Farmboy Studios has been streaming our radio station since October of this year and continues to be a proud partner with us. They develop Roblox prison games.</p>
     </section>
 </body>
 </html>
