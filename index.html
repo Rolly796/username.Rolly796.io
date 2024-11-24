@@ -22,10 +22,43 @@
             align-items: center;
             justify-content: space-between;
         }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
         .logo img {
             width: 150px; /* Adjusted width */
             height: auto; /* Maintain aspect ratio */
             object-fit: contain; /* Maintain aspect ratio */
+        }
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .play-button-header {
+            background-color: #D32F2F; /* Darker red for contrast */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .play-button-header:hover {
+            background-color: #C62828;
+        }
+        .play-button-header img {
+            width: 20px;
+            height: 20px;
         }
         .navigation {
             display: flex;
@@ -35,6 +68,9 @@
             color: white;
             text-decoration: none;
             font-weight: bold;
+        }
+        .navigation .active {
+            text-decoration: underline;
         }
         .play-button {
             background-color: #D32F2F; /* Darker red for contrast */
@@ -132,14 +168,16 @@
             var audio = document.getElementById('audio');
             var playButton = document.getElementById('play-button');
             var status = document.getElementById('status');
-            var playIcon = document.getElementById('play-icon');
+            var playIcon = document.getElementById('play-icon-header');
             if (audio.paused) {
                 audio.play();
                 playButton.innerHTML = '<img id="play-icon" src="Images/Pause.png" alt="Pause Icon">';
+                playIcon.src = 'Images/Pause.png';
                 status.textContent = 'Playing';
             } else {
                 audio.pause();
                 playButton.innerHTML = '<img id="play-icon" src="Images/Play.png" alt="Play Icon">';
+                playIcon.src = 'Images/Play.png';
                 status.textContent = 'Paused';
             }
         }
@@ -173,13 +211,19 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="Images/Frame 294.png" alt="RTX Radio Logo">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="Images/Frame 294.png" alt="RTX Radio Logo">
+            </div>
+            <div class="logo-text">RTX Radio</div>
+            <button class="play-button-header" onclick="togglePlay()">
+                <img id="play-icon-header" src="Images/Play.png" alt="Play Icon">
+            </button>
         </div>
         <nav class="navigation">
             <a href="#">For You</a>
             <a href="#">Your Library</a>
-            <a href="#">Live Radio</a>
+            <a href="#" class="active">Live Radio</a>
             <a href="#">Podcasts</a>
             <a href="#">Artist Radio</a>
             <a href="#">Playlists</a>
@@ -206,5 +250,3 @@
     </section>
 </body>
 </html>
-
-
