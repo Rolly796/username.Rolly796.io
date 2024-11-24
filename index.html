@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RTX Radio - News</title>
+    <title>RTX Radio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,32 +71,43 @@
         .navigation .active {
             text-decoration: underline;
         }
-        .news-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: #f7f7f7;
-        }
-        .news-item {
-            margin-bottom: 20px;
+        .play-button {
+            background-color: #D32F2F;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            text-align: center;
+            width: 70px;
+            height: 70px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
         }
-        .news-item img {
-            max-width: 150px;
-            height: auto;
-            margin-right: 20px;
+        .play-button:hover {
+            background-color: #C62828;
         }
-        .news-item div {
-            flex: 1;
+        .play-button img {
+            width: 30px;
+            height: 30px;
         }
-        .news-item h3 {
-            margin: 0 0 10px 0;
-            color: #D32F2F;
+        .audio-player {
+            text-align: center;
+            margin: 20px auto;
         }
-        .news-item p {
-            margin: 0;
+        audio {
+            width: 100%;
+            max-width: 600px;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 1.2em;
+            text-align: center;
         }
         .feature {
             padding: 20px;
@@ -119,58 +130,56 @@
         .feature p {
             margin: 10px 0;
         }
+        .banner {
+            background-color: #D32F2F;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px; /* Center content and limit width */
+        }
+        .banner a {
+            color: #ffccbc;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
     <script>
-        async function fetchNews() {
-            const apiKey = 'YOUR_NEWSAPI_KEY';
-            const url = `https://newsapi.org/v2/everything?q=music+entertainment&sortBy=publishedAt&apiKey=${apiKey}`;
-
+        async function fetchStatus() {
             try {
-                const response = await fetch(url);
+                const response = await fetch('status.json');
                 const data = await response.json();
-                const newsContainer = document.querySelector('.news-container');
-                newsContainer.innerHTML = '';
-
-                data.articles.forEach(article => {
-                    const newsItem = document.createElement('div');
-                    newsItem.className = 'news-item';
-
-                    const newsImage = document.createElement('img');
-                    newsImage.src = article.urlToImage || 'default-news-image.jpg';
-                    newsImage.alt = 'News Image';
-
-                    const newsContent = document.createElement('div');
-                    const newsTitle = document.createElement('h3');
-                    newsTitle.textContent = article.title;
-
-                    const newsDescription = document.createElement('p');
-                    newsDescription.textContent = article.description;
-
-                    newsContent.appendChild(newsTitle);
-                    newsContent.appendChild(newsDescription);
-
-                    newsItem.appendChild(newsImage);
-                    newsItem.appendChild(newsContent);
-
-                    newsContainer.appendChild(newsItem);
-                });
+                const statusElement = document.getElementById('live-indicator');
+                if (data.status === 'on') {
+                    statusElement.textContent = 'LIVE: On Air';
+                    statusElement.style.backgroundColor = '#ff5252';
+                } else {
+                    statusElement.textContent = 'OFF AIR';
+                    statusElement.style.backgroundColor = '#666';
+                }
             } catch (error) {
-                console.error('Error fetching news:', error);
+                console.error('Error fetching status:', error);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', fetchNews);
+        document.addEventListener('DOMContentLoaded', fetchStatus);
 
         function togglePlay() {
             var audio = document.getElementById('audio');
-            var playButton = document.getElementById('play-button-header');
+            var playButton = document.getElementById('play-button');
+            var status = document.getElementById('status');
             var playIcon = document.getElementById('play-icon-header');
             if (audio.paused) {
                 audio.play();
+                playButton.innerHTML = '<img id="play-icon" src="Images/Pause.png" alt="Pause Icon">';
                 playIcon.src = 'Images/Pause.png';
+                status.textContent = 'Playing';
             } else {
                 audio.pause();
+                playButton.innerHTML = '<img id="play-icon" src="Images/Play.png" alt="Play Icon">';
                 playIcon.src = 'Images/Play.png';
+                status.textContent = 'Paused';
             }
         }
 
@@ -213,20 +222,32 @@
             </button>
         </div>
         <nav class="navigation">
-            <a href="#" class="active">News</a>
-            <a href="#">Live Radio</a>
+            <a href="#">For You</a>
+            <a href="#">Your Library</a>
+            <a href="#" class="active">Live Radio</a>
+            <a href="#">Podcasts</a>
+            <a href="#">Artist Radio</a>
+            <a href="#">Playlists</a>
+            <a href="#">News</a>
             <a href="#">More</a>
         </nav>
         <div id="live-indicator" class="live-indicator">Loading...</div>
     </header>
-    <section class="news-container">
-        <!-- News items will be dynamically inserted here -->
+    <section class="banner">
+        <p>Streaming Holiday Cheer: Non-stop Beats, Joyful Vibes!</p>
+        <a href="#">Listen Now</a>
+    </section>
+    <section class="audio-player">
+        <audio id="audio" src="https://azura.typicalmedia.net/listen/rolly_tune_xperience_(rtx)/stream" type="audio/mpeg"></audio>
+        <button id="play-button" class="play-button" onclick="togglePlay()">
+            <img id="play-icon" src="Images/Play.png" alt="Play Icon">
+        </button>
+        <div id="status" class="status">Paused</div>
     </section>
     <section class="feature">
         <h2>Community Spotlight</h2>
-        <img id="spotlight-image" src="Images/Town.png" alt="Spotlight Image">
+        <img id="spotlight-image" src="Images/Town.png" alt="="Spotlight Image">
         <p id="spotlight-description">Farmboy Studios has been streaming our radio station since October and continues to be a proud partner. They specialize in developing immersive Roblox prison games, consistently delivering top-notch content that captivates and entertains. We’re thrilled to have them as part of our community and look forward to many more collaborative ventures.</p>
     </section>
 </body>
 </html>
-
