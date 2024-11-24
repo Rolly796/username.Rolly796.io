@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTX Radio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: url('header-background.jpg') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .live-indicator {
+            color: white;
+            padding: 5px;
+            display: inline-block;
+            margin-top: 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .banner {
+            background-color: #DF0000;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .banner a {
+            color: #ffccbc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .play-button {
+            background-color: #ff6f00;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .play-button:hover {
+            background-color: #ff8f00;
+        }
+        .play-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .audio-player {
+            text-align: center;
+            margin: 20px auto;
+        }
+        audio {
+            width: 100%;
+            max-width: 600px;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .feature {
+            padding: 20px;
+            background-color: #f7f7f7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        .feature h2 {
+            margin-top: 0;
+        }
+        .feature img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .feature p {
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        async function fetchStatus() {
+            try {
+                console.log('Fetching status...');
+                const response = await fetch('status.json'); // Ensure this path is correct
+                console.log('Response received:', response);
+                const data = await response.json();
+                console.log('Data parsed:', data);
+                const statusElement = document.getElementById('live-indicator');
+                if (data.status === 'on') {
+                    statusElement.textContent = 'LIVE: On Air';
+                    statusElement.style.backgroundColor = '#ff5252';
+                } else {
+                    statusElement.textContent = 'OFF AIR';
+                    statusElement.style.backgroundColor = '#666';
+                }
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStatus);
+
+        function togglePlay() {
+            var audio = document.getElementById('audio');
+            var playButton = document.getElementById('play-button');
+            var status = document.getElementById('status');
+            var playIcon = document.getElementById('play-icon');
+            if (audio.paused) {
+                audio.play();
+                playButton.innerHTML = '<img id="play-icon" src="Images/Pause.png" alt="Pause Icon"> Pause';
+                status.textContent = 'Playing';
+            } else {
+                audio.pause();
+                playButton.innerHTML = '<img id="play-icon" src="Images/Play.png" alt="Play Icon"> Play';
+                status.textContent = 'Paused';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Images/Frame 294.png" alt="RTX Radio Logo">
+        </div>
+        <div id="live-indicator" class="live-indicator">Loading...</div>
+    </header>
+    <section class="banner">
+        <p>Streaming Holiday Cheer: Non-stop Beats, Joyful Vibes!</p>
+        <a href="#">Listen Now</a>
+    </section>
+    <section class="audio-player">
+        <audio id="audio" src="https://azura.typicalmedia.net/listen/rolly_tune_xperience_(rtx)/stream" type="audio/mpeg"></audio>
+        <button id="play-button" class="play-button" onclick="togglePlay()">
+            <img id="play-icon" src="Images/Play.png" alt="Play Icon"> Play
+        </button>
+        <div id="status" class="status">Paused</div>
+    </section>
+    <section class="feature">
+        <h2>Featured Playlist</h2>
+        <img src="Images/playlist.jpg" alt="Featured Playlist">
+        <p>Check out our handpicked playlist featuring the best holiday tunes to keep your spirits high!</p>
+    </section>
+    <section class="feature">
+        <h2>DJ Spotlight</h2>
+        <img src="Images/dj.jpg" alt="DJ Spotlight">
+        <p>Meet DJ Melody, our holiday special DJ, bringing you the best beats and festive vibes all season long!</p>
+    </section>
+</body>
+</html>
