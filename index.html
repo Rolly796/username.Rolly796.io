@@ -13,7 +13,7 @@
             padding: 0;
         }
         header {
-            background-color: #FF0000; /* Festive red color */
+            background-color: #FF0000;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -73,6 +73,14 @@
         .navigation .active {
             text-decoration: underline;
         }
+        .audio-player {
+            text-align: center;
+            margin: 20px auto;
+        }
+        audio {
+            width: 100%;
+            max-width: 600px;
+        }
         .play-button {
             background-color: #D32F2F;
             color: white;
@@ -98,121 +106,41 @@
             width: 30px;
             height: 30px;
         }
-        .audio-player {
+        .volume-slider-container {
             text-align: center;
             margin: 20px auto;
         }
-        audio {
+        .volume-slider {
             width: 100%;
-            max-width: 600px;
+            max-width: 300px;
         }
         .status {
             margin-top: 10px;
             font-size: 1.2em;
             text-align: center;
         }
-        .feature {
-            padding: 20px;
-            background-color: #f7f7f7;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            text-align: center;
-            max-width: 800px; /* Center content and limit width */
-        }
-        .feature h2 {
-            margin-top: 0;
-            color: #D32F2F;
-        }
-        .feature img {
-            max-width: 200px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px auto;
-        }
-        .feature p {
-            margin: 10px 0;
-        }
-        .banner {
-            background-color: #D32F2F;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin: 20px auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px; /* Center content and limit width */
-        }
-        .banner p {
-            font-weight: bold; /* Make the text bold */
-        }
-        .banner a {
-            color: #ffccbc;
-            text-decoration: none;
-            font-weight: bold;
-        }
     </style>
     <script>
-        async function fetchStatus() {
-            try {
-                const response = await fetch('status.json');
-                const data = await response.json();
-                const statusElement = document.getElementById('live-indicator');
-                if (data.status === 'on') {
-                    statusElement.textContent = 'LIVE: On Air';
-                    statusElement.style.backgroundColor = '#ff5252';
-                } else {
-                    statusElement.textContent = 'OFF AIR';
-                    statusElement.style.backgroundColor = '#666';
-                }
-            } catch (error) {
-                console.error('Error fetching status:', error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchStatus);
-
         function togglePlay() {
             var audio = document.getElementById('audio');
             var playButton = document.getElementById('play-button');
             var status = document.getElementById('status');
-            var playIcon = document.getElementById('play-icon-header');
+            var playIcon = document.getElementById('play-icon');
             if (audio.paused) {
                 audio.play();
                 playButton.innerHTML = '<img id="play-icon" src="Images/Pause.png" alt="Pause Icon">';
-                playIcon.src = 'Images/Pause.png';
                 status.textContent = 'Playing';
             } else {
                 audio.pause();
                 playButton.innerHTML = '<img id="play-icon" src="Images/Play.png" alt="Play Icon">';
-                playIcon.src = 'Images/Play.png';
                 status.textContent = 'Paused';
             }
         }
 
-        let spotlightIndex = 0;
-        const spotlightData = [
-            {
-                image: 'Images/Town.png',
-                description: 'Farmboy Studios has been streaming our radio station since October and continues to be a proud partner. They specialize in developing immersive Roblox prison games, consistently delivering top-notch content that captivates and entertains. We’re thrilled to have them as part of our community and look forward to many more collaborative ventures.'
-            },
-            {
-                image: 'Images/Truck.jpg',
-                description: 'American Truck Simulator | Want to stream RTX Radio while trucking across America? You can easily add our stream to the in-game radio by pressing **R**. We proudly broadcast our station directly within the game, ensuring you have the best beats and tunes on your virtual journeys. Happy trucking! 🚛🎶'
-            }
-        ];
-
-        function rotateSpotlight() {
-            const spotlightImage = document.getElementById('spotlight-image');
-            const spotlightDescription = document.getElementById('spotlight-description');
-
-            spotlightIndex = (spotlightIndex + 1) % spotlightData.length;
-
-            spotlightImage.src = spotlightData[spotlightIndex].image;
-            spotlightDescription.textContent = spotlightData[spotlightIndex].description;
+        function setVolume(value) {
+            var audio = document.getElementById('audio');
+            audio.volume = value / 100;
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            setInterval(rotateSpotlight, 8000); // Rotate every 8 seconds
-        });
     </script>
 </head>
 <body>
@@ -222,9 +150,6 @@
                 <img src="Images/Frame 294.png" alt="RTX Radio Logo">
             </div>
             <div class="logo-text">RTX Radio</div>
-            <button class="play-button-header" onclick="togglePlay()">
-                <img id="play-icon-header" src="Images/Play.png" alt="Play Icon">
-            </button>
         </div>
         <nav class="navigation">
             <a href="#">For You</a>
@@ -232,12 +157,7 @@
             <a href="#">News</a>
             <a href="#">More</a>
         </nav>
-        <div id="live-indicator" class="live-indicator">Loading...</div>
     </header>
-    <section class="banner">
-        <p><strong>Streaming Holiday Cheer</strong>: Non-stop Beats, Joyful Vibes!</p>
-        <a href="#">Listen Now</a>
-    </section>
     <section class="audio-player">
         <audio id="audio" src="https://azura.typicalmedia.net/listen/rolly_tune_xperience_(rtx)/stream" type="audio/mpeg"></audio>
         <button id="play-button" class="play-button" onclick="togglePlay()">
@@ -245,10 +165,16 @@
         </button>
         <div id="status" class="status">Paused</div>
     </section>
-    <section class="feature">
-        <h2>Community Spotlight</h2>
-        <img id="spotlight-image" src="Images/Town.png" alt="Spotlight Image">
-        <p id="spotlight-description">Farmboy Studios has been streaming our radio station since October and continues to be a proud partner. They specialize in developing immersive Roblox prison games, consistently delivering top-notch content that captivates and entertains. We’re thrilled to have them as part of our community and look forward to many more collaborative ventures.</p>
+    <section class="volume-slider-container">
+        <input
+            type="range"
+            class="volume-slider"
+            min="0"
+            max="100"
+            value="50"
+            oninput="setVolume(this.value)"
+        />
+        <p>Volume</p>
     </section>
 </body>
 </html>
